@@ -3,10 +3,10 @@ import "./Calculator.css";
 
 const Calculator = () => {
   const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
   const operators = ["+", "-", "*", "/"];
 
   const handleButtonClick = (value) => {
-    // Prevent multiple operators in a row
     if (
       operators.includes(value) &&
       (input === "" || operators.includes(input.slice(-1)))
@@ -14,7 +14,6 @@ const Calculator = () => {
       return;
     }
 
-    // Prevent multiple decimals in a single number
     if (
       value === "." &&
       input
@@ -30,21 +29,25 @@ const Calculator = () => {
 
   const handleClear = () => {
     setInput("");
+    setResult("");
   };
 
   const handleEqual = () => {
     try {
-      const result = eval(input);
-      setInput(result.toString());
+      const evalResult = eval(input);
+      setResult(evalResult.toString());
     } catch (error) {
-      setInput("Error");
+      setResult("Error");
     }
   };
 
   return (
     <div className="calculator">
       <h1>React Calculator</h1>
-      <input type="text" value={input} readOnly />
+      <div className="display">
+        <input type="text" value={input} readOnly />
+        <div className="result">{result}</div>
+      </div>
       <div className="buttons">
         {[
           "7",
@@ -70,8 +73,8 @@ const Calculator = () => {
               button === "="
                 ? handleEqual()
                 : button === "C"
-                ? handleClear()
-                : handleButtonClick(button)
+                  ? handleClear()
+                  : handleButtonClick(button)
             }
           >
             {button}
